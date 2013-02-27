@@ -17,29 +17,20 @@
 	</tr>
 <?php 
 
-// Configuracion
-$file = "usuarios.txt";
-
-// Leer el fichero de datos
-$content=file_get_contents($file);
-$arrayFile=explode("\r",$content);
-
-// Mostrar en la tabla
-// Recorrer para cada linea
-foreach($arrayFile as $key => $line):?>
-<tr>
-<?php
-		$arrayLine = explode('|', $line);
-		// Recorrer para cada elemento	
-		foreach($arrayLine as $key1 => $value):?>
+//Show user table
+//veremos como pasar bien el array a la vista (ahora funciona por que lo incluse users.php
+foreach($arrayLine as $key => $line):?>
+	<tr>
+	<?php
+		// for each user line	
+		foreach($line as $key1 =>$value):?>
 			<td><?=$value;?></td>
 		<?php endforeach;?>
-	<td><a href=\"formulario.php?id=".$key."\">update</a>
+		<td>
+			<a href="users.php?action=update&id=<?= $key;?>">update</a>
 				&nbsp;
-			  <a href=\"confirmar_borrar.php?id=".$key."\">delete</a>
-		  </td>";		
-	</tr>";
-
-<?php endforeach; ?>
-
+			<a href="users.php?action=delete&id=<?=$key;?>">delete</a>
+		</td>		
+	</tr>
+<?php endforeach;?>
 </table>;
