@@ -12,9 +12,9 @@
 <div id="wrapper">
 
 <form action=procesar_delete" method="POST" enctype="multipart/form-data">
-<ul>
+	<ul>
 		<li>id  <input type="hidden" name="id" value=""/></li>
-		<li>Button: <input type="si" name="si" value="Boton"/></li>
+		<li>Button: <input type="hidden" name="si" value="Boton"/></li>
 		<li>Reset: <input type="no" name="no" value="Reset"/></li>
 	</ul>
 </form>

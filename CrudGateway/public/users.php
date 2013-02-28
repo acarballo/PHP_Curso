@@ -11,10 +11,14 @@ if(isset($_GET['action']))
 else
 	$action='select';	
 
+//Include DataGateways
+include_once '../application/models/dataGatewayFiles.php';
+
 //include Models
-include_once '../application/models/functions.php';
-include_once '../application/models/filesFunctions.php';
+include_once '../application/models/files/functions.php';
+include_once '../application/models/files/filesFunctions.php';
 include_once '../application/models/users/usersFunctions.php';
+
 
 //read configuration
 $config = readConfig('../application/configs/config.ini','production');
@@ -37,42 +41,45 @@ switch ($action){
 			$sports=array();
 			include_once('../application/views/forms/user.php');
 		}		
-		include_once('../application/views/forms/user.php');
 	break;
 	
 	case 'update':
 		if($_POST){
-			$dataFileArray=readDataFromFile($userFilename);
-			$user=$dataFileArray[$_POST['id']];					
-			$name=updatePhoto($user[11], $pathUpload);			
+			$users=readUsers();
+			$user=$users[$_POST['id']];
+			$name=updatePhoto($user[11], $pathUpload);
 			$_POST[]=$name;
-			$dataFileArray[$_POST['id']]=$_POST;			
-			writeDataToFile($userFilename, $dataFileArray, TRUE);			
+			$users[$_POST['id']]=$_POST;	
+					
+			writeDataToFile($userFilename, $users, TRUE);			
 			header('Location: /users.php');
 			exit;
 		}
 		else {//entrada en update, leo y pongo los datos
-			$dataArray=readDataFromFile($userFilename);
-			$usuario=$dataArray[$_GET['id']];		
-			$pets=commaToArray($usuario[8]);
-			$sports=commaToArray($usuario[9]);		
+			//$dataArray=readDataFromFile($userFilename);
+			//$usuario=$dataArray[$_GET['id']];		
+			$user=readUser($_GET['id']);
+			$pets=commaToArray($user[8]);
+			$sports=commaToArray($user[9]);
+				
 			include_once('../application/views/forms/user.php');
 		}
 	break;
 	
 	case 'delete':
-		if(!$_POST){ //ininio pregunta Si o no 
-			$arrayDatos=readDataFromFile($userFilename);
-			$usuario = $arrayDatos[$_GET['id']];
+		if(!$_POST){ //inicio, pregunta Si o no 
+			//$user=readUser($_GET['id']);
 			include_once('../application/views/users/delete.php');
 		}
 		else{
 			if($_POST['submit']=='Si'){
-				$dataFileArray=readDataFromFile($userFilename);	
-				$userdata=$dataFileArray[$_GET['id']];
-				deleteFile($userdata[11],$pathUpload);
-				unset($dataFileArray[$_GET[id]]);
-				writeDataToFile($userFilename, $dataFileArray, TRUE);				
+				//$users=readDataFromFile($userFilename);	
+				//$userdata=$dataFileArray[$_GET['id']];//no lo tengo en el POST ya que he quitado el imput hidden del id en la view
+				//$user=readUser($_GET['id']);//no lo tengo en el POST ya que he quitado el imput hidden del id en la view
+				//deleteFile($user[11],$pathUpload);
+				//unset($dataFileArray[$_GET[id]]);
+				//writeDataToFile($userFilename, $users, TRUE);	
+				deleteUser($_GET['id']);
 			}
 			header('Location: /users.php');
 			exit;
@@ -80,7 +87,7 @@ switch ($action){
 	break;
 	
 	case 'select':
-		$arrayLine=readDataFromFile($userFilename);
+		$users=readUsers();
 		include_once('../application/views/users/select.php');
 	break;
 		

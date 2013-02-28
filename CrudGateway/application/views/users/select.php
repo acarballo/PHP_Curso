@@ -18,8 +18,8 @@
 <?php 
 
 //Show user table
-//veremos como pasar bien el array a la vista (ahora funciona por que lo incluse users.php
-foreach($arrayLine as $key => $line):?>
+//veremos como pasar bien el array a la vista (ahora funciona por que lo incluse users.php)
+foreach($users as $key => $line):?>
 	<tr>
 	<?php
 		// for each user line	
