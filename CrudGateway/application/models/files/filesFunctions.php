@@ -10,6 +10,15 @@ function readDataFromFile($fileName){
 	$arrayFile=explode("\r",$content);
 	foreach($arrayFile as $key => $line)
 		$arrayLine[] = explode('|', $line);
+	
+	//ñapa
+	/*foreach($arrayLine as $key => $value){
+		if(isset($arrayLine[8]))
+			$arrayLine[8]=commaToArray($value[8]);
+		if(isset($arrayLine[9]))
+			$arrayLine[9]=commaToArray($value[9]);
+	}*/
+		
 	return $arrayLine;
 }
 
@@ -25,16 +34,18 @@ function writeDataToFile ($filename, $data, $rewrite=FALSE){
 	{
 		foreach($data as $key => $value)
 			$pipes[]=arrayToPipes($value);
+		//$id no en el update
 		$data=implode("\r",$pipes);
 		file_put_contents($filename, $data);
 	}
 	else
 	{
 		$data=arrayToPipes($data);
+		$id=count($data);
 		$data.="\r";
 		file_put_contents($filename, $data, FILE_APPEND);
 	}
-	return;
+	return $id;
 }
 
 

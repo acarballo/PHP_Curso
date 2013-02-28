@@ -26,8 +26,6 @@ function readUser($id){
 	try{
 		$users=readUsers();
 		$user=$users[$_GET['id']];
-		//$pets=commaToArray($user[8]);
-		//$sports=commaToArray($user[9]);
 		return $user;
 	}catch(Exception $e){
 		echo 'catch Exception: ',  $e->getMessage(), "\n";
@@ -37,11 +35,38 @@ function readUser($id){
 }
 
 function insertUser($data){
-	return $id|FALSE;
+	$config = readConfig('../application/configs/config.ini','production');
+	$userFilename = $config['userFilename'];
+	$pathUpload = $config['uploadDirectory'];
+	
+	try{
+		$name=updatePhoto('', $pathUpload);
+		$data[]=$name;
+		$id=writeDataToFile($userFilename, $data, FALSE);
+		return $id;
+	}catch(Exception $e){
+		echo 'catch Exception: ',  $e->getMessage(), "\n";
+		return FALSE;
+	}
 }
 
 function updateUser($id, $data){
-	return TRUE|FALSE;
+	$config = readConfig('../application/configs/config.ini','production');
+	$userFilename = $config['userFilename'];
+	$pathUpload = $config['uploadDirectory'];
+	
+	try{
+		$users=readUsers();
+		$user=$users[$id];
+		$name=updatePhoto($user[11], $pathUpload);
+		$data[]=$name;
+		$users[$id]=$data;
+		writeDataToFile($userFilename, $users, TRUE);
+	}catch(Exception $e){
+		echo 'catch Exception: ',  $e->getMessage(), "\n";
+		return FALSE;
+	}
+
 }
 
 function deleteUser($id){
@@ -62,3 +87,4 @@ function deleteUser($id){
 	}
 	
 }
+

@@ -19,3 +19,11 @@ function updateUser($id, $data){
 function deleteUser($id){
 	return TRUE|FALSE;
 }
+
+function readPets($id){
+	return $array;
+}
+
+function readSports($id){
+	return $array;
+}
