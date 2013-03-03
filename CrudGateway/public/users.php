@@ -11,8 +11,20 @@ if(isset($_GET['action']))
 else
 	$action='select';	
 
-//Include DataGateways
-include_once '../application/models/dataGatewayFiles.php';
+
+
+//read configuration 
+include_once '../application/configs/configFunctions.php';
+$config = readConfig('../application/configs/config.ini','googlepru');
+$typeDataSave=$config['typeDataSave']; //production/development/googlepru]
+
+//include DataGateways
+if($typeDataSave=='google'){
+	include_once '../application/models/dataGatewayGoogle.php';
+}
+else{
+	include_once '../application/models/dataGatewayFiles.php';
+}
 
 //include Models
 include_once '../application/models/files/functions.php';
@@ -20,17 +32,11 @@ include_once '../application/models/files/filesFunctions.php';
 include_once '../application/models/users/usersFunctions.php';
 
 
-//read configuration
-$config = readConfig('../application/configs/config.ini','production');
-//$config = parse_ini_file('../application/configs/config.ini',true);
-$userFilename = $config['userFilename'];
-$pathUpload = $config['uploadDirectory'];
-
 //select action.
 switch ($action){
 	case 'insert':
 		if($_POST){
-			insertUser($_POST);
+			insertUser($config,$_POST);
 			header('Location: /users.php');
 			exit;
 		}
@@ -43,12 +49,12 @@ switch ($action){
 	
 	case 'update':
 		if($_POST){
-			updateUser($_POST['id'],$_POST);
+			updateUser($config,$_POST['id'],$_POST);
 			header('Location: /users.php');
 			exit;
 		}
 		else {//entrada en update, leo y pongo los datos
-			$user=readUser($_GET['id']);
+			$user=readUser($config,$_GET['id']);
 			//$pets=$user[8];
 			//$sports=$user[9];	
 			$pets=commaToArray($user[8]);
@@ -64,7 +70,7 @@ switch ($action){
 		}
 		else{
 			if($_POST['submit']=='Si'){
-				deleteUser($_GET['id']);
+				deleteUser($config,$_GET['id']);
 			}
 			header('Location: /users.php');
 			exit;
@@ -72,7 +78,7 @@ switch ($action){
 	break;
 	
 	case 'select':
-		$users=readUsers();
+		$users=readUsers($config);
 		include_once('../application/views/users/select.php');
 	break;
 		

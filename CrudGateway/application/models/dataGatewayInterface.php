@@ -1,22 +1,22 @@
 <?php
 
-function readUsers(){
+function readUsers($config){
 	return $array|FALSE;
 }
 
-function readUser($id){
+function readUser($config,$id){
 	return $array;
 }
 
-function insertUser($data){
+function insertUser($config,$data){
 	return $id|FALSE;
 }
 
-function updateUser($id, $data){
+function updateUser($config,$id,$data){
 	return TRUE|FALSE;
 }
 
-function deleteUser($id){
+function deleteUser($config,$id){
 	return TRUE|FALSE;
 }
 

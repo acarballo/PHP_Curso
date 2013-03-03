@@ -1,16 +1,10 @@
 <?php
 
-include_once '../application/models/files/functions.php';
-include_once '../application/models/files/filesFunctions.php';
-$config = readConfig('../application/configs/config.ini','production');
-$userFilename = $config['userFilename'];
-
 /**
  * Read data from file
  * @return array|boolean
  */
-function readUsers(){
-	$config = readConfig('../application/configs/config.ini','production');
+function readUsers($config){
 	$userFilename = $config['userFilename'];
 	try{
 		$users=readDataFromFile($userFilename);
@@ -21,10 +15,15 @@ function readUsers(){
 	}
 }
 
-function readUser($id){
+/**
+ * Read user data
+ * @param integer $id
+ * @return array
+ */
+function readUser($config,$id){
 	
 	try{
-		$users=readUsers();
+		$users=readUsers($config);
 		$user=$users[$_GET['id']];
 		return $user;
 	}catch(Exception $e){
@@ -34,8 +33,12 @@ function readUser($id){
 	
 }
 
-function insertUser($data){
-	$config = readConfig('../application/configs/config.ini','production');
+/**
+ * insert user data
+ * @param unknown $data
+ * @return Ambigous <void, number>|boolean
+ */
+function insertUser($config,$data){
 	$userFilename = $config['userFilename'];
 	$pathUpload = $config['uploadDirectory'];
 	
@@ -50,13 +53,18 @@ function insertUser($data){
 	}
 }
 
-function updateUser($id, $data){
-	$config = readConfig('../application/configs/config.ini','production');
+/**
+ * update user data
+ * @param unknown $id
+ * @param unknown $data
+ * @return boolean
+ */
+function updateUser($config,$id, $data){
 	$userFilename = $config['userFilename'];
 	$pathUpload = $config['uploadDirectory'];
 	
 	try{
-		$users=readUsers();
+		$users=readUsers($config);
 		$user=$users[$id];
 		$name=updatePhoto($user[11], $pathUpload);
 		$data[]=$name;
@@ -69,14 +77,18 @@ function updateUser($id, $data){
 
 }
 
-function deleteUser($id){
-	$config = readConfig('../application/configs/config.ini','production');
-	$userFilename = $config['userFilename'];
-	$pathUpload = $config['uploadDirectory'];
+/**
+ * delete user data
+ * @param unknown $id
+ * @return boolean
+ */
+function deleteUser($config,$id){
+	$userFilename = $config['username'];
+	$pathUpload = $config['password'];
 	
 	try{
-		$users=readUsers();
-		$user=readUser($id);//no lo tengo en el POST ya que he quitado el imput hidden del id en la view
+		$users=readUsers($config);
+		$user=readUser($config,$id);//no lo tengo en el POST ya que he quitado el imput hidden del id en la view
 		deleteFile($user[11],$pathUpload);
 		unset($users[$id]);
 		writeDataToFile($userFilename, $users, TRUE);
@@ -87,4 +99,3 @@ function deleteUser($id){
 	}
 	
 }
-
