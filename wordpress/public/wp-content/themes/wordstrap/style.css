@@ -1,0 +1,340 @@
+/*
+Theme Name: Wordstrap
+Theme URI: http://www.olabaworks.com/wordstrap/
+Author: Aritz Olabarrieta
+Author URI: http://www.olabaworks.com
+Description: Wordstrap is a WordPress theme designed with the popular Bootstrap CSS Framework, and using Font Awesome for the lightweight usage of icons. You can customize the layout in one, two or three columns, and choose the background colors of the header, navbar and widget headers and some other interesting features available in the theme options page.
+Version: 1.7.8
+License: GNU General Public License
+License URI: license.txt
+Tags: one-column, two-columns, three-columns, right-sidebar, custom-header, custom-menu, custom-background, featured-images, threaded-comments, translation-ready, theme-options
+*/
+
+/* BOOTSTRAP OVERRIDES */
+
+/* do not underline links on hover */
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+
+/* alert-heading */
+.alert.alert-heading p {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    text-shadow: 0px 0px 1px #ddd;
+}
+
+/* alert padding */
+.alert {
+    padding: 20px;
+}
+
+/* erradicate thin dotted outlines !! */
+select,
+select:focus,
+a,
+a:active,
+a:focus,
+button,
+button:active,
+.btn,
+.btn:focus,
+input[type="checkbox"],
+input[type="checkbox"]:focus,
+input[type="radio"],
+input[type="radio"]:focus,
+input[type="submit"],
+input[type="submit"]:focus,
+input[type="button"],
+input[type="button"]:focus {
+    outline: none;
+}
+
+/* form legends */
+legend {
+    border-bottom-color: #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+}
+
+/* labels */
+label {
+    font-weight: bold;
+}
+label.checkbox {
+    font-weight: normal;
+}
+
+/* bootstrap labels in comments and tables */
+table .label {
+    background: none;
+}
+.comment .label a {
+    color: #fff;
+}
+.comment .label a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Navbar border-radius */
+div.navbar-inner {
+    border-radius: 0px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* END OF BOOTSTRAP OVERRIDES */
+
+/* WORDPRESS DEFAULT **********************************************************/
+
+/* default WordPress calendar widget */
+table#wp-calendar {
+    border-collapse: separate;
+    margin: 0px;
+    margin: auto;
+    padding: 0px;
+    width: 96%;
+}
+table#wp-calendar caption {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: .5em;
+}
+table#wp-calendar td {
+    font-size: .8em;
+    padding: .1em;
+    text-align: center;
+}
+table#wp-calendar thead th {
+    background-image: -moz-linear-gradient(center top , #333333, #555555);
+    background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#555555));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#555555');
+    color: #f0f0f0;
+    font-size: .8em;
+    font-weight: bold;
+    text-align: center;
+    padding: .2em;
+}
+table#wp-calendar tbody td {
+    background: #dadada;
+    border: 1px solid #f0f0f0;
+    color: #222;
+    vertical-align: middle;
+}
+table#wp-calendar tbody td:hover {
+    background: #eee;
+}
+table#wp-calendar tfoot td {
+    background: none;
+}
+table#wp-calendar td a {
+    font-weight: bold;
+    font-size: 1em;
+}
+table tfoot td {
+    background: none;
+}
+table tfoot td:hover {
+    background: none;
+}
+table#wp-calendar tbody td.pad:hover {
+    background: #dadada;
+}
+table#wp-calendar td#prev {
+    font-size: 1em;
+    padding: .4em;
+    text-align: left;
+}
+table#wp-calendar td#next {
+    font-size: 1em;
+    padding: .4em;
+    text-align: right;
+}
+
+/* default WordPress recent comments widget */
+.well-widgets .ws-widget-content ul li.recentcomments {
+    font-size: .7em;
+    font-weight: normal;
+    margin: 0px;
+    padding: 2px;
+}
+.well-widgets .ws-widget-content ul li.recentcomments a {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.wp-caption {
+    margin-top: .4em;
+    margin-bottom: 1.625em;
+    max-width: 96%;
+    padding: 9px;
+}
+.wp-caption img {
+    display: block;
+    margin: 0 auto;
+    max-width: 98%;
+}
+.wp-caption .wp-caption-text,
+.gallery-caption {
+    color: #666;
+    font-family: Georgia, serif;
+    font-size: 12px;
+}
+.wp-caption .wp-caption-text {
+    margin-bottom: 0.6em;
+    padding: 10px 0 5px 40px;
+    position: relative;
+}
+.wp-caption .wp-caption-text:before {
+    color: #666;
+    content: '\2014';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    margin-right: 5px;
+    left: 10px;
+    top: 7px;
+    position: absolute;
+}
+.sticky {
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+}
+
+/* Post author highlighting */
+.commentlist > li.bypostauthor {
+    background: transparent;
+    border: 0px;
+    color: #444;
+}
+.commentlist > li.bypostauthor .comment-meta {
+    color: #575757;
+}
+.commentlist > li.bypostauthor:before {
+    content: none;
+}
+/* Post Author threaded comments */
+.commentlist .children > li.bypostauthor {
+    background: transparent;
+    border: 0px;
+}
+
+/* Alignment */
+.alignleft {
+    display: inline;
+    float: left;
+    margin-right: 1em;
+    margin-top: 0.5em;
+}
+.alignright {
+    display: inline;
+    float: right;
+    margin-left: 1.625em;
+}
+.aligncenter {
+    clear: both;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
+
+/* comments */
+.form-allowed-tags code {
+    margin: 10px;
+    padding: 10px;
+    font-size: 0.8em;
+    display: block;
+    color: #555;
+}
+textarea#comment {
+    width: 70%;
+    height: 80px;
+}
+div#ws-comment-list p.logged-in-as {
+    background-color:#fcf8e3;
+    border:1px solid #fbeed5;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    font-size: .8em;
+    margin-bottom:12px;
+    margin-top: 10px;
+    padding:6px;
+    text-shadow:0 1px 0 rgba(255, 255, 255, 0.5);
+}
+div#respond {
+    background: #eaeaea;
+    border-radius: 4px;
+    padding: 10px;
+}
+h3#reply-title {
+    border-bottom: 2px dotted #cacaca;
+    padding-bottom: 5px;
+}
+select.postform {
+    width: 100%;
+    margin: auto;
+}
+select.postform option {
+    padding: 2px;
+    margin: 2px;
+}
+
+/* tagcloud */
+div.tagcloud a {
+    word-wrap: break-word;
+}
+
+/* Thickbox: set thickbox z-index higher than fixed nav and header */
+div#TB_window {
+    z-index: 2000;
+}
+/* END WORDPRESS DEFAULT ******************************************************/
+
+/* MEDIA QUERY SENTENCES ******************************************************/
+
+@media (max-width: 480px) {
+
+    /* Navbar adjustments */
+    div#ws-navbar div.navbar-inner {
+        padding: 0px 30px;
+    }
+    ul.ws-nav li.divider-vertical {
+        display: none;
+    }
+
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+
+    /* Navbar adjustments */
+    div#ws-navbar div.navbar-inner {
+        padding: 0px 30px;
+    }
+    ul.ws-nav li.divider-vertical {
+        display: none;
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 980px) {
+
+    /* Navbar adjustments */
+    div#ws-navbar div.navbar-inner {
+        padding: 0px;
+    }
+    ul.ws-nav li.divider-vertical {
+        display: none;
+    }
+
+}
+
+/* END MEDIA QUERY SENTENCES **************************************************/
