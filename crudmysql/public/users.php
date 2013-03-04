@@ -21,15 +21,19 @@ $typeDataSave=$config['typeDataSave']; //production/development/googlepru/mysql]
 //include DataGateways
 if($typeDataSave=='google'){
 	include_once '../application/models/dataGatewayGoogle.php';
+	include_once '../application/models/files/functions.php';
+	include_once '../application/models/files/filesFunctions.php';
 } else if($typeDataSave=='mysql'){
 	include_once '../application/models/dataGatewayMysql.php';
+	include_once '../application/models/mysql/functions.php';
+	include_once '../application/models/mysql/filesFunctions.php';
 } else {
 	include_once '../application/models/dataGatewayFiles.php';
+	include_once '../application/models/files/functions.php';
+	include_once '../application/models/files/filesFunctions.php';
 }
 
 //include Models
-include_once '../application/models/files/functions.php';
-include_once '../application/models/files/filesFunctions.php';
 include_once '../application/models/users/usersFunctions.php';
 
 

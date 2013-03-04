@@ -32,3 +32,10 @@ function arrayToPipes($array){
 	$result=implode('|',$result);
 	return $result;
 }
+
+function printDataPreformated($data){
+	echo("<pre>");
+	print_r($data);
+	echo("</pre>");
+}
+

@@ -23,13 +23,11 @@ function readUsers($config){
 		$cnx = connectDB($config);
 		
 		//leer usuarios de la tabla
-		$query = "SELECT * FROM users";
+		//$query = "SELECT * FROM users";
+		$query = "SELECT iduser,name,email,password,direccion,descripcion,genders_idgender,cities_idcity,pets,'Sp','Su',photo FROM users";
 		$result=mysql_query($query,$cnx);
 		//devolver array
 		while($row = mysql_fetch_assoc($result)){
-			//echo("<pre>");
-			//print_r($row);
-			//echo("</pre>");
 			$users[]=$row;
 		}
 		return $users;
@@ -46,9 +44,27 @@ function readUsers($config){
  */
 function readUser($config,$id){
 	
+/*	try{
+		$cnx = connectDB($config);
+		
+		//leer usuarios de la tabla
+		$query = "SELECT iduser,name,email,password,direccion,descripcion,genders_idgender,cities_idcity,pets,'Sp','Su',photo FROM users ";
+		$query .= " WHERE iduser = ".$id;
+		$result=mysql_query($query,$cnx);
+		//devolver array
+		$row = mysql_fetch_assoc($result);
+		$user = array_values($row);
+
+		return $user;
+	}catch(Exception $e){
+		echo 'catch Exception: ',  $e->getMessage(), "\n";
+		return FALSE;
+	}
+	*/
+	
 	try{
 		$users=readUsers($config);
-		$user=$users[$_GET['id']];
+		$user=array_values($users[$_GET['id']]);
 		return $user;
 	}catch(Exception $e){
 		echo 'catch Exception: ',  $e->getMessage(), "\n";
@@ -57,6 +73,8 @@ function readUser($config,$id){
 	
 }
 
+
+
 /**
  * insert user data
  * @param unknown $data
@@ -64,10 +82,6 @@ function readUser($config,$id){
  */
 function insertUser($config,$data){
 	$pathUpload = $config['uploadDirectory'];
-	$dbserver = $config["db.server"];
-	$dbdatabase = $config["db.database"];
-	$dbuser = $config["db.user"];
-	$dbpassword = $config["db.password"];
 	
 	try{
 		$name=updatePhoto('', $pathUpload);
@@ -75,13 +89,32 @@ function insertUser($config,$data){
 
 		//conectar al servidor
 		$cnx = connectDB($config);
-		
-		$query = "insert into users values (";
-		(isset($data[0]))?$query .=$data[0].',':',';
-		(isset($data[1]))?$query .='"'.$data[1].'"",':'"",';
-		
-		echo($query);
-		die;
+		$query = "INSERT INTO users";
+		$query .="(name,email,password,direccion,descripcion,pets,photo,genders_idgender,cities_idcity) VALUES (";
+		$query .="'".(isset($data['name'])?$data['name']:"")."',";
+		$query .="'".(isset($data['email'])?$data['email']:"")."',";
+		$query .="'".(isset($data['password'])?$data['password']:"")."',";
+		$query .="'".(isset($data['address'])?$data['address']:"")."',";
+		$query .="'".(isset($data['description'])?$data['description']:"")."',";
+		$query .="'".(isset($data['pets'])?implode(',',$data['pets']):"")."',";
+		$query .="'".(isset($data[0])?$data[0]:"")."',";
+		$query .=(isset($data['sex'])?getCity($data['sex']):NULL).",";
+		$query .=(isset($data['city'])?getGender($data['city']):NULL);
+		$query .=")";
+		if (!mysql_query($query,$cnx)) {
+			echo('Mysql Error: '.mysql_error());
+		}
+		$id = mysql_insert_id($cnx);
+
+		//insert sports
+		if(isset($data['sports'])){
+			foreach($data['sports'] as $key => $value){
+				$query = "INSERT INTO users_has_sports VALUES(".$id.",".getSport($value).")";
+				if (!mysql_query($query,$cnx)) {
+					echo('Mysql Error: '.mysql_error());
+				}
+			}
+		}
 		
 		return $id;
 	}catch(Exception $e){
@@ -103,10 +136,42 @@ function updateUser($config,$id, $data){
 	try{
 		$users=readUsers($config);
 		$user=$users[$id];
-		$name=updatePhoto($user[11], $pathUpload);
+		$name=updatePhoto($user['photo'], $pathUpload);
 		$data[]=$name;
-		$users[$id]=$data;
-		writeDataToFile($userFilename, $users, TRUE);
+		//$users[$id]=$data;
+		$IdKey = $user['iduser'];
+		
+		//conectar al servidor
+		$cnx = connectDB($config);
+		$query = "DELETE FROM users_has_sports WHERE users_iduser = ".$IdKey;
+		if (!mysql_query($query,$cnx)) {
+			echo('Mysql Error: '.mysql_error());
+		}
+		
+		//printDataPreformated($user);
+		
+		$cnx = connectDB($config);
+		$query = "UPDATE users set ";
+		$query .=" name = '".$data['name']."',";
+		$query .=" email = '".$data['email']."',";
+		$query .=" password = '".$data['password']."',";
+		$query .=" direccion = '".$data['address']."',";
+		$query .=" descripcion = '".$data['description']."',";
+		$query .=" pets = '".implode(',',$data['pets'])."',";
+		$query .=" photo = '".$data[11]."',";
+		//$query .=" gender = ".getGender($data['genders_idgender']).",";
+		//$query .=" city = ".getCity($data['cities_idcity']);		
+		$query .=" genders_idgender = 1,";
+		$query .=" cities_idcity = 1";
+		$query .=" WHERE iduser = ".$IdKey;
+		
+		if (!mysql_query($query,$cnx)) {
+			echo('Mysql Error: '.mysql_error());
+		}
+		//$id = mysql_insert_id($cnx);
+		//printDataPreformated($query);
+		//die; 
+		return TRUE;
 	}catch(Exception $e){
 		echo 'catch Exception: ',  $e->getMessage(), "\n";
 		return FALSE;
@@ -120,15 +185,25 @@ function updateUser($config,$id, $data){
  * @return boolean
  */
 function deleteUser($config,$id){
-	$userFilename = $config['username'];
-	$pathUpload = $config['password'];
 	
 	try{
-		$users=readUsers($config);
-		$user=readUser($config,$id);//no lo tengo en el POST ya que he quitado el imput hidden del id en la view
+		$user=readUser($config,$id);
 		deleteFile($user[11],$pathUpload);
 		unset($users[$id]);
-		writeDataToFile($userFilename, $users, TRUE);
+		$IdKey = $user[0];
+		
+		//conectar al servidor
+		$cnx = connectDB($config);
+		$query = "DELETE FROM users_has_sports WHERE users_iduser = ".$IdKey;
+		if (!mysql_query($query,$cnx)) {
+			echo('Mysql Error: '.mysql_error());
+		}
+		$query = "DELETE FROM users WHERE iduser = ".$IdKey;
+		if (!mysql_query($query,$cnx)) {
+			echo('Mysql Error: '.mysql_error());
+		}
+
+		
 		return TRUE;
 	}catch(Exception $e){
 		echo 'catch Exception: ',  $e->getMessage(), "\n";

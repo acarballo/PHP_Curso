@@ -44,6 +44,7 @@ function readUsers($config){
 	}
 }
 
+
 /**
  * Read user data
  * @param integer $id
