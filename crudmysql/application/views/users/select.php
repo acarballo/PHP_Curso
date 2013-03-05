@@ -24,7 +24,7 @@ foreach($users as $key => $line):?>
 	<?php
 		// for each user line	
 		foreach($line as $key1 =>$value):?>
-			<td><?=$value;?></td>
+			<td><?=(is_array($value))?implode(',',$value):$value;?></td>
 		<?php endforeach;?>
 		<td>
 			<a href="users.php?action=update&id=<?= $key;?>">update</a>

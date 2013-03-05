@@ -36,6 +36,8 @@ if($typeDataSave=='google'){
 //include Models
 include_once '../application/models/users/usersFunctions.php';
 
+include_once '../application/views/helpers/helpersFunctions.php';
+include_once '../application/controllers/helpers/actionHelpersFunctions.php';
 
 //select action.
 switch ($action){
@@ -46,8 +48,17 @@ switch ($action){
 			exit;
 		}
 		else {//entrada en insert, leo y pongo los datos
-			$pets=array();
-			$sports=array();
+			//$pets=array();
+			//$sports=array();
+			$user=array(
+					'name'=>'',
+					'email'=>'',
+					'gender'=>'',
+					'city'=>'',
+					'pets'=>array(),
+					'sports'=>array()
+					//.....
+			);
 			include_once('../application/views/forms/user.php');
 		}		
 	break;
@@ -62,11 +73,12 @@ switch ($action){
 			$user=readUser($config,$_GET['id']);
 			//$pets=$user[8];
 			//$sports=$user[9];	
-			$pets=commaToArray($user[8]);
-			$sports=commaToArray($user[9]);
+			//$pets=commaToArray($user[8]);
+			//$sports=commaToArray($user[9]);
 			
 			include_once('../application/views/forms/user.php');
 		}
+		debug('x',$_GET);
 	break;
 	
 	case 'delete':

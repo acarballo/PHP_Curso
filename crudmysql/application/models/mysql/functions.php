@@ -79,7 +79,7 @@ function getGender($gender){
 		case 'O':
 			return 3;
 			break;
-		default: return NULL;
+		default: return 4;
 	}
 }
 
