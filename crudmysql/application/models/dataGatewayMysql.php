@@ -25,7 +25,7 @@ function readUsers($config){
 		//leer usuarios de la tabla
 		//$query = "SELECT * FROM users";
 		$query = "SELECT a.iduser,a.name,a.email,a.password,a.direccion,a.descripcion,c.gender,b.city,a.pets,'sports','Su',a.photo ";
-		$query .= "FROM users a, cities b, genders c where a.genders_idgender = c.idgender and  a.cities_idcity = b.idcity";
+		$query .= "FROM users a, cities b, genders c where a.genders_idgender = c.idgender and  a.cities_idcity = b.idcity order by a.iduser";
 		$result=mysqli_query($cnx,$query);
 
 		//devolver array
@@ -65,12 +65,24 @@ function readUsers($config){
 function readUser($config,$id){
 	
 	try{
-		$users=readUsers($config);
-		//$user=array_values($users[$_GET['id']]);
-		$user=$users[$_GET['id']];
+		$cnx = connectDB($config);
 		
-		//debug('user',$user);
-		//die;
+		//leer usuarios de la tabla
+		$query = "SELECT * FROM users WHERE iduser=".$id;
+		$result=mysqli_query($cnx,$query);
+
+		//devolver array
+		if($row = mysqli_fetch_assoc($result)){
+			$querySports = "SELECT a.sports_idsport, b.sport FROM users_has_sports a, sports b WHERE a.sports_idsport = b.idsport and a.users_iduser = ". $row['iduser'];
+			$resultSport=mysqli_query($cnx,$querySports);
+			$sport= array();
+			while($rowSport = mysqli_fetch_assoc($resultSport)){
+				$sport[]=$rowSport['sport'];
+			}
+			$row['sports']=$sport;			
+			$user=$row;			
+		}
+		//debug('',$user,TRUE);
 		return $user;
 	}catch(Exception $e){
 		echo 'catch Exception: ',  $e->getMessage(), "\n";
@@ -243,4 +255,24 @@ function deleteUser($config,$id){
 		return FALSE;
 	}
 	
+}
+
+/**
+ * Initialize user
+ *
+ * @return array $user
+ */
+function initUser(){
+	$user=array(
+			'name'=>'',
+			'email'=>'',
+			'password'=>'',
+			'descripcion'=>'',
+			'direccion'=>'',
+			'pets'=>array(),
+			'sports'=>array(),
+			'genders_idgender'=>'',
+			'cities_idcity'=>''
+	);
+	return $user;
 }

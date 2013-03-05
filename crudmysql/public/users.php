@@ -14,7 +14,7 @@ else
 
 
 //read configuration 
-include_once '../application/configs/configFunctions.php';
+include_once '../application/controllers/helpers/actionHelpersFunctions.php';
 $config = readConfig('../application/configs/config.ini','mysql');
 $typeDataSave=$config['typeDataSave']; //production/development/googlepru/mysql]
 
@@ -37,7 +37,7 @@ if($typeDataSave=='google'){
 include_once '../application/models/users/usersFunctions.php';
 
 include_once '../application/views/helpers/helpersFunctions.php';
-include_once '../application/controllers/helpers/actionHelpersFunctions.php';
+
 
 //select action.
 switch ($action){
@@ -50,15 +50,7 @@ switch ($action){
 		else {//entrada en insert, leo y pongo los datos
 			//$pets=array();
 			//$sports=array();
-			$user=array(
-					'name'=>'',
-					'email'=>'',
-					'gender'=>'',
-					'city'=>'',
-					'pets'=>array(),
-					'sports'=>array()
-					//.....
-			);
+			$user=initUser();
 			include_once('../application/views/forms/user.php');
 		}		
 	break;
@@ -70,15 +62,16 @@ switch ($action){
 			exit;
 		}
 		else {//entrada en update, leo y pongo los datos
+			$user=initUser();
 			$user=readUser($config,$_GET['id']);
 			//$pets=$user[8];
 			//$sports=$user[9];	
 			//$pets=commaToArray($user[8]);
 			//$sports=commaToArray($user[9]);
-			
+			//debug('user',$user,TRUE);
 			include_once('../application/views/forms/user.php');
 		}
-		debug('x',$_GET);
+		
 	break;
 	
 	case 'delete':

@@ -27,9 +27,9 @@ foreach($users as $key => $line):?>
 			<td><?=(is_array($value))?implode(',',$value):$value;?></td>
 		<?php endforeach;?>
 		<td>
-			<a href="users.php?action=update&id=<?= $key;?>">update</a>
+			<a href="users.php?action=update&id=<?=$line['iduser'];?>">update</a>
 				&nbsp;
-			<a href="users.php?action=delete&id=<?=$key;?>">delete</a>
+			<a href="users.php?action=delete&id=<?=$line['iduser'];?>">delete</a>
 		</td>		
 	</tr>
 <?php endforeach;?>
