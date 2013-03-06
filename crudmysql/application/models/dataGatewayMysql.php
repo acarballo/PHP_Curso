@@ -12,6 +12,31 @@ function connectDB($config){
 	return $cnx;
 }
 
+/**
+ * Connect to Mysql
+ * @param array $config
+ * @return resource $cnx
+ */
+function connectDBoriginal($config)
+{
+	// Conectar al servidor de DB
+	$cnx = mysqli_connect($config['db.server'],$config['db.user'],
+			$config['db.password'],$config['db.database']);
+	// Conectar a la BD
+	//mysqli_select_db($config['db.database']);
+
+	return $cnx;
+}
+
+/**
+ * Disconnect from Mysql
+ * @param unknown $cnx
+ */
+function disconnectDB($cnx)
+{
+	mysqli_close($cnx);
+	return;
+}
 
 /**
  * Read data from file
@@ -40,6 +65,22 @@ function readUsers($config){
 			}
 			//$row['sports']=implode(',',$sport);
 			$row['sports']=$sport;
+			
+			
+			if($row['pets']!=''){
+				$mispets=explode(',',$row['pets']);
+				$petsName= array();
+				foreach($mispets as $key=>$value){
+					$queryPets = "SELECT * FROM pets WHERE idpet = ". $value;
+					//debug('',$queryPets,FALSE);
+					$resultPets=mysqli_query($cnx,$queryPets);
+					$rowPet = mysqli_fetch_assoc($resultPets);
+					//debug('',$resultPets,FALSE);
+					$petsName[]=$rowPet['pet'];
+				}
+				//debug('',$petsName,FALSE);
+				$row['pets']=$petsName;
+			}
 			
 			$users[]=$row;
 			
@@ -82,6 +123,10 @@ function readUser($config,$id){
 			$row['sports']=$sport;			
 			$user=$row;			
 		}
+		
+		// FIXME: 
+		$user['pets']=explode(',',$user['pets']);
+		
 		//debug('',$user,TRUE);
 		return $user;
 	}catch(Exception $e){
@@ -161,24 +206,24 @@ function insertUser($config,$data){
  * @return boolean
  */
 function updateUser($config,$id, $data){
-	$userFilename = $config['userFilename'];
 	$pathUpload = $config['uploadDirectory'];
 	
 	try{
-		$users=readUsers($config);
-		$user=$users[$id];
+		//$users=readUsers($config);
+		$user=readUser($config,$id);
 		$name=updatePhoto($user['photo'], $pathUpload);
 		$data[]=$name;
 		//$users[$id]=$data;
 		$IdKey = $user['iduser'];
-		
+		//debug('',$id,FALSE);
+		//debug('',$user,TRUE);
 		//conectar al servidor
 		$cnx = connectDB($config);
 		$query = "DELETE FROM users_has_sports WHERE users_iduser = ".$IdKey;
-		if (!mysqli_query($query,$cnx)) {
+		if (!mysqli_query($cnx,$query)) {
 			echo('Mysql Error: '.mysqli_error($cnx));
 		}
-		
+		//debug('',$data,TRUE);
 		//printDataPreformated($user);
 		
 		$cnx = connectDB($config);
@@ -190,14 +235,15 @@ function updateUser($config,$id, $data){
 		$query .=" descripcion = '".$data['description']."',";
 		$query .=" pets = '".implode(',',$data['pets'])."',";
 		$query .=" photo = '".$data[11]."',";
-		//$query .=" gender = ".getGender($data['genders_idgender']).",";
-		//$query .=" city = ".getCity($data['cities_idcity']);		
-		$query .=" genders_idgender = 1,";
-		$query .=" cities_idcity = 1";
+		$query .=" genders_idgender = ".$data['sex'].",";
+		$query .=" cities_idcity = ".$data['city'];		
 		$query .=" WHERE iduser = ".$IdKey;
 		
-		if (!mysqli_query($query,$cnx)) {
+		//debug('',$data,TRUE);
+		
+		if (!mysqli_query($cnx,$query)) {
 			echo('Mysql Error: '.mysqli_error($cnx));
+			die;
 		}
 		//$id = mysql_insert_id($cnx);
 		//printDataPreformated($query);
@@ -206,9 +252,10 @@ function updateUser($config,$id, $data){
 		//insert sports
 		if(isset($data['sports'])){
 			foreach($data['sports'] as $key => $value){
-				$query = "INSERT INTO users_has_sports VALUES(".$id.",".getSport($value).")";
+				$query = "INSERT INTO users_has_sports VALUES(".$id.",".$value.")";
+				
 				if (!mysqli_query($cnx,$query)) {
-					echo('Mysql Error: '.mysql_error());
+					echo('Mysql Error: '.mysqli_error());
 					die;
 				}
 			}
@@ -233,19 +280,21 @@ function deleteUser($config,$id){
 	
 	try{
 		$user=readUser($config,$id);
-		deleteFile($user[11],$pathUpload);
-		unset($users[$id]);
-		$IdKey = $user[0];
+		deleteFile($user['photo'],$pathUpload);
+		unset($user['photo']);
+		$IdKey = $user['iduser'];
 		
 		//conectar al servidor
 		$cnx = connectDB($config);
 		$query = "DELETE FROM users_has_sports WHERE users_iduser = ".$IdKey;
-		if (!mysqli_query($query,$cnx)) {
-			echo('Mysql Error: '.mysql_error());
+		if (!mysqli_query($cnx,$query)) {
+			echo('Mysql Error: '.mysqli_error());
+			die;
 		}
 		$query = "DELETE FROM users WHERE iduser = ".$IdKey;
-		if (!mysqli_query($query,$cnx)) {
-			echo('Mysql Error: '.mysql_error());
+		if (!mysqli_query($cnx,$query)) {
+			echo('Mysql Error: '.mysqli_error());
+			die;
 		}
 
 		
