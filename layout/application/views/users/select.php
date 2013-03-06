@@ -1,3 +1,9 @@
+<?php 
+$users=$viewVars['users'];
+$title=$viewVars['title'];
+?>
+
+<h1><?=$title ?></h1>
 <a href="users.php?action=insert">Add</a>
 <table border=1>
 	<tr>
@@ -15,7 +21,6 @@
 		<th>options</th>
 	</tr>
 <?php 
-
 //Show user table
 //veremos como pasar bien el array a la vista (ahora funciona por que lo incluse users.php)
 foreach($users as $key => $line):?>

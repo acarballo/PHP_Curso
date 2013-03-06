@@ -37,7 +37,7 @@ if($typeDataSave=='google'){
 include_once '../application/models/users/usersFunctions.php';
 
 include_once '../application/views/helpers/helpersFunctions.php';
-
+include_once '../application/controllers/helpers/viewsFunctions.php';
 
 //select action.
 switch ($action){
@@ -48,10 +48,15 @@ switch ($action){
 			exit;
 		}
 		else {//entrada en insert, leo y pongo los datos
+			ob_start();//buffer
+			
 			//$pets=array();
 			//$sports=array();
 			$user=initUser();
 			include_once('../application/views/forms/user.php');
+			
+			$content=ob_get_clean();
+			ob_end_flush();
 		}		
 	break;
 	
@@ -63,6 +68,8 @@ switch ($action){
 			exit;
 		}
 		else {//entrada en update, leo y pongo los datos
+			ob_start();//buffer
+			
 			$user=initUser();
 			$user=readUser($config,$_GET['id']);
 			//$pets=$user[8];
@@ -71,15 +78,25 @@ switch ($action){
 			//$sports=commaToArray($user[9]);
 			//debug('user',$user,TRUE);
 			include_once('../application/views/forms/user.php');
+			
+			$content=ob_get_clean();
+			ob_end_flush();
 		}
 		
 	break;
 	
 	case 'delete':
 		if(!$_POST){ //inicio, pregunta Si o no 
-			include_once('../application/views/users/delete.php');
+			//ob_start();//buffer
+		
+			//include_once('../application/views/users/delete.php');
+			
+			//$content=ob_get_clean();
+			//ob_end_flush();
+			$content = renderView($config,'users/delete.php');
 		}
 		else{
+			
 			if($_POST['submit']=='Si'){
 				deleteUser($config,$_GET['id']);
 			}
@@ -89,11 +106,26 @@ switch ($action){
 	break;
 	
 	case 'select':
+		//ob_start();//buffer 
+		//$users=readUsers($config);
+		//include_once('../application/views/users/select.php');
+		//$content=ob_get_clean();
+		//ob_end_flush();
 		$users=readUsers($config);
-		include_once('../application/views/users/select.php');
+		$viewVars=array('users'=>$users,
+						'title'=>"usuarios");
+		$content = renderView($config,'users/select.php',$viewVars);
 	break;
 		
 	default:
 		echo('this is default');
 	break;		
 }
+
+//render layout (postdispatch)
+
+//include_once '../application/layout/layout.php';
+$layoutVars=array('content'=>$content,
+				  'title'=>"Mi aplicacion");
+$layout = renderlayout($config,'layout.php',$layoutVars);
+echo $layout;
