@@ -13,7 +13,7 @@
 
 <form method="POST">
 	<ul>
-		<li>Id: <?= (isset($_GET['id']))?$_GET['id']:'1';?> will be removed</li>
+		<li>Id: <?= (isset($_REQUEST['id']))?$_REQUEST['id']:'1';?> will be removed</li>
 		<li>Submit: <input type="submit" name="submit" value="Si"/></li>
 		<li>Submit: <input type="submit" name="submit" value="No"/></li>	
 	</ul>

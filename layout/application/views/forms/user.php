@@ -1,3 +1,6 @@
+<?php 
+$user=$viewVars['user'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
