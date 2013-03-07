@@ -1,18 +1,17 @@
 <?php
 
-echo("index");
-
-
-//read configuration
+//Read configuration
 include_once '../application/controllers/helpers/actionHelpersFunctions.php';
 $config = readConfig('../application/configs/config.ini','mysql');
 $typeDataSave=$config['typeDataSave']; //production/development/googlepru/mysql]
 
-
 define ('NO_ACTION', 'no_action');
 define ('NO_CONTROLLER', 'no_controller');
 
-//include DataGateways
+// Include DataGateways
+// Include actionHelpers
+// Include viewHelpers
+// Include Models
 if($typeDataSave=='google'){
 	include_once '../application/models/dataGatewayGoogle.php';
 	include_once '../application/models/files/functions.php';
@@ -26,16 +25,17 @@ if($typeDataSave=='google'){
 	include_once '../application/models/files/functions.php';
 	include_once '../application/models/files/filesFunctions.php';
 }
-
 include_once '../application/views/helpers/helpersFunctions.php';
 include_once '../application/controllers/helpers/viewsFunctions.php';
-
 
 // Include Front functions
 include_once('../application/frontFunctions.php');
 
-
 $route=router($config);
+
+session_start();
+//debug('', $_SESSION);
+
 switch ($route['controller']){
 
 	case 'users':
@@ -47,15 +47,12 @@ switch ($route['controller']){
 	break;
 	
 	case 'error':
-		debug($route);
+		debug('',$route);
 		echo "ERROR";
 	break;
 
 	case 'index':
-		//debug($route);
 		include ($config['path.controllers']."/index.php");
 	break;	
 
 }
-
-

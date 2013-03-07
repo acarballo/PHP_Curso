@@ -73,10 +73,12 @@ function readUsers($config){
 				foreach($mispets as $key=>$value){
 					$queryPets = "SELECT * FROM pets WHERE idpet = ". $value;
 					//debug('',$queryPets,FALSE);
+					//debug('',$mispets);
 					$resultPets=mysqli_query($cnx,$queryPets);
-					$rowPet = mysqli_fetch_assoc($resultPets);
-					//debug('',$resultPets,FALSE);
-					$petsName[]=$rowPet['pet'];
+					if($rowPet = mysqli_fetch_assoc($resultPets)){
+						//debug('',$resultPets,FALSE);
+						$petsName[]=$rowPet['pet'];
+					}
 				}
 				//debug('',$petsName,FALSE);
 				$row['pets']=$petsName;
@@ -181,8 +183,8 @@ function insertUser($config,$data){
 		die;*/
 		//insert sports
 		if(isset($data['sports'])){
-			foreach($data['sport'] as $key => $value){
-				$query = "INSERT INTO users_has_sports VALUES(".$id.",".getSport($value).")";
+			foreach($data['sports'] as $key => $value){
+				$query = "INSERT INTO users_has_sports VALUES(".$id.",".$value.")";
 				if (!mysqli_query($cnx,$query)) {
 					echo('Mysql Error: '.mysqli_error($cnx));
 					die;
