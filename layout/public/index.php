@@ -31,9 +31,12 @@ include_once '../application/controllers/helpers/viewsFunctions.php';
 // Include Front functions
 include_once('../application/frontFunctions.php');
 
-$route=router($config);
-
 session_start();
+$route=router($config);
+$route=acl($route);
+
+
+
 //debug('', $_SESSION);
 
 switch ($route['controller']){

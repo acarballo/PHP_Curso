@@ -21,6 +21,7 @@ function loginUser($config,$data){
 		while ($row = mysqli_fetch_assoc($result))
 		{
 			$_SESSION['iduser']=$row['iduser'];
+			$_SESSION['idrole']=$row['idrole'];
 		}
 		return TRUE;
 	}
