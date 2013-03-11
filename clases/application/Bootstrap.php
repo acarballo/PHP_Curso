@@ -2,30 +2,58 @@
 
 class Bootstrap
 {
-	
+
+	// Start Session
 	// Read configuration
+	
 	// Include DataGateways
 	// Include actionHelpers
 	// Include viewHelpers
 	// Include Models
 	// Include Front functions
-	// Start Session
 	// Route
 	// Acl
 	
+	private $config;
+	private $env;
+	private $route;
 	
-	//Read configuration
-	include_once '../application/controllers/helpers/actionHelpersFunctions.php';
-	$config = readConfig('../application/configs/config.ini','mysql');
-	$typeDataSave=$config['typeDataSave']; //production/development/googlepru/mysql]
+	public function __construct($config, $env){
+		$this->config=$config;
+		$this->env=$env;
+		
+		$this->startRegister();
+		$this->readConfig();
+		$this->router($this->config);
+		$this->route=$this->acl($this->route);
+		
+		return $this->route;
+	}
 	
-	define ('NO_ACTION', 'no_action');
-	define ('NO_CONTROLLER', 'no_controller');
+	protected function startRegister(){
+		session_start();
+		$_SESSION['register']=array();
+		$_SESSION['app']=array();
+	}
 	
-	// Include DataGateways
-	// Include actionHelpers
-	// Include viewHelpers
-	// Include Models
+	protected function readConfig(){
+
+		include_once '../application/controllers/helpers/actionHelpersFunctions.php';
+		$config = readConfig($this->config,$this->env);
+		//$typeDataSave=$config['typeDataSave']; //production/development/googlepru/mysql]
+		$_SESSION['register']['config']=$config();
+		
+	}
+	
+	protected function router(){
+		$this->route=router($this->config);
+	}
+	
+	protected function acl(){
+		
+	}
+	
+/* pasarlos a clases 	
 	if($typeDataSave=='google'){
 		include_once '../application/models/dataGatewayGoogle.php';
 		include_once '../application/models/files/functions.php';
@@ -43,11 +71,20 @@ class Bootstrap
 	include_once '../application/controllers/helpers/viewsFunctions.php';
 	
 	include_once('../application/frontFunctions.php');
+	*/
+	/**
+	 * @return the $route
+	 */
+	public function getRoute() {
+		return $this->route;
+	}
+
+	/**
+	 * @param field_type $route
+	 */
+	public function setRoute($route) {
+		$this->route = $route;
+	}
 	
-	session_start();
-	$route=router($config);
-	$route=acl($route);
 	
-	
-	$frontController= new controllers_frontController($route);
 }
