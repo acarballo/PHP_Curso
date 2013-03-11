@@ -8,15 +8,19 @@ class controllers_frontController{
 
 		$route = $router->getRoute();
 		$this->config = $_SESSION['register']['config'];
-				
-		//new controller etc .......		
-		//include ($this->config['path.controllers']."/".$router['controller']."php");
 		
 		$controller = "controllers_".$route['controller']."controller";
 		$action = $route['action']."Action";
-		$controller = new $controller;
-		$controller->$action();
 		
+		/*echo('<pre>');
+		echo($controller);
+		echo($action);
+		echo('</pre>');
+		die;*/
+		
+		$controller = new $controller;
+		$controller->$action();		
+		$controller->render();
 	}
 
 }

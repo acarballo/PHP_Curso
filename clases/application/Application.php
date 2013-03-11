@@ -2,19 +2,19 @@
 
 class Application{
 
-	private $config;
+	private $configPath;
 	private $env;
 	private $route;
 	
-	public function __construct($config, $env){
-		$this->config=$config;
+	public function __construct($configPath, $env){
+		$this->configPath=$configPath;
 		$this->env=$env;
 		
 		return $this;
 	}
 	
 	public function Bootstrap(){
-		$this->route = new Bootstrap($this->config, $this->env);
+		$this->route = new Bootstrap($this->configPath, $this->env);
 		
 		return $this;
 	}
