@@ -23,4 +23,9 @@ class controllers_frontController{
 		$controller->render();
 	}
 
+	public function __destruct(){
+		//poner el render aqui, tengo que poner el $controller como  
+		//cuando se destruye el objeto ???
+	}
+	
 }

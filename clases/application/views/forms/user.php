@@ -23,10 +23,10 @@ $user=$viewVars['user'];
 		<li>Password: <input type="password" name="password"/></li>
 		<li>Dirección: <input type="text" name="address" value="<?= (isset($user['direccion'])&&$user['direccion']!='')?$user['direccion']:'';?>"/></li>
 		<li>Descripción: <textarea rows="10" cols="10" name="description"><?= (isset($user['descripcion'])&&$user['descripcion']!='')?$user['descripcion']:'';?></textarea></li>
-		<li>Sexo: <?=createRadioCheckFromDb($config, 'genders', 'sex','idgender', 'gender', array($user['genders_idgender']), FALSE);?>
+		<li>Sexo: <?= views_helpers_viewHelpers::createRadioCheckFromDb($config, 'genders', 'sex','idgender', 'gender', array($user['genders_idgender']), FALSE);?>
 		</li>
 		<li>Ciudad:
-	     	<?=createSelectFromDb($config, 'cities', 'city','idcity', 'city', array($user['cities_idcity']), FALSE);?>
+	     	<?=views_helpers_viewHelpers::createSelectFromDb($config, 'cities', 'city','idcity', 'city', array($user['cities_idcity']), FALSE);?>
 		</li>
 		<li>Foto: <input type="file" name="photo"/>
 		<?php 
@@ -40,9 +40,9 @@ $user=$viewVars['user'];
 		?>
 		</li>
 		<li>Mascotas:
-		<?=createRadioCheckFromDb($config, 'pets', 'pets', 'idpet', 'pet', array($user['pets']), TRUE);?>
+		<?=views_helpers_viewHelpers::createRadioCheckFromDb($config, 'pets', 'pets', 'idpet', 'pet', array($user['pets']), TRUE);?>
 		</li>
-		<li>Deportes:<?=createSelectFromDb($config, 'sports', 'sports', 'idsport', 'sport', $user['sports'], TRUE);?></li>
+		<li>Deportes:<?=views_helpers_viewHelpers::createSelectFromDb($config, 'sports', 'sports', 'idsport', 'sport', $user['sports'], TRUE);?></li>
 		<li>Submit: <input type="submit" name="submit" value="Enviar"/></li>
 		<li>Button: <input type="button" name="button" value="Boton"/></li>
 		<li>Reset: <input type="reset" name="reset" value="Reset"/></li>

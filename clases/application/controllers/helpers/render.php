@@ -7,7 +7,7 @@ class controllers_helpers_render{
 	public function __construct(){	
 		$this->config=$_SESSION['register']['config'];
 	}
-	
+//se pueden hacer estaticos para no instanciar -- ver	
 	/**
 	 * Render view
 	 * @param unknown $view

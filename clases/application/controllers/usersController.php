@@ -17,8 +17,12 @@ class controllers_usersController extends controllers_abstractController{
 	}
 
 	public function selectAction(){
-		$gateway=new models_dataGatewayMysql();
-		$users=$gateway->readUsers();
+		//$gateway=new models_dataGatewayMysql();
+		$gateway=models_dataGatewayMysql::getInstance();
+		$gateUser= new models_users_users(); 
+		
+		//$users=$gateway->readUsers();
+		$users=$gateUser->readUsers();
 		$viewVars=array('users'=>$users,
 						'title'=>"usuarios");
 		$render = new controllers_helpers_render();
@@ -26,10 +30,14 @@ class controllers_usersController extends controllers_abstractController{
 	}
 
 	public function insertAction(){
-		$gateway=new models_dataGatewayMysql();
+		//$gateway=new models_dataGatewayMysql();
+		$gateUser= new models_users_users();
 	
 		if(!$_POST){
-			$user=$gateway->initUser();
+			
+			//$user=$gateway->initUser();
+			$user=$gateUser->initUser();
+			
 			$viewVars=array('user'=>$user,
 					'title'=>"usuarios");
 			$render = new controllers_helpers_render();

@@ -24,6 +24,7 @@ class Bootstrap{
 		$this->startRegister();
 		$this->readConfig();
 		$this->route=$this->router($this->configPath);
+		//controllers_helpers_actionHelpers::debug('------', $this->route);
 		$this->route=$this->acl($this->route);
 		
 		return $this->route;
@@ -46,7 +47,7 @@ class Bootstrap{
 	protected function router(){
 		//$this->route=router($this->config);
 
-		$config=$this->config;
+		$config=$this->configPath;
 		$controllerActions=array(
 				'index'=>array('index'),
 				'author'=>array('login','logout'),
@@ -57,7 +58,8 @@ class Bootstrap{
 		$route['controller']=$parse[1];
 		@$route['action']=$parse[2];
 		
-		if(file_exists($config['path.controllers']."/".$route['controller'].".php"))
+		
+/*		if(file_exists($config['path.controllers']."/".$route['controller'].".php"))
 		if(in_array($route['action'],$controllerActions[$route['controller']]))
 		{
 			for($i=3;$i<sizeof($parse);$i+=2)
@@ -78,17 +80,21 @@ class Bootstrap{
 			$route['controller']='index';
 			$route['action']='index';
 		}
-		
+	*/	
 		// 	debug($route);
 		// 	debug($_REQUEST);
 		
 		// 	die;
 		
 		$this->route=$route;
+		return $route;
 	}
 	
 	protected function acl(){
 		$route=$this->route;
+		//controllers_helpers_actionHelpers::debug('', $route);
+		$_SESSION['idrol']=1;//FIXME
+		$_SESSION['iduser']=1;
 		if(!isset($_SESSION['idrol']))
 		{
 			// FIXME: -8.03.2013-acl-: HARDCODE DEFAULT ROL
@@ -130,9 +136,14 @@ class Bootstrap{
 			}
 		
 		}
-		$route['controller']='users';
-		$route['action']='select';
-		
+		//$route['controller']='users';
+		//$route['action']='select';
+		//$route['controller']='index';
+		//$route['action']='index';
+	/*	controllers_helpers_actionHelpers::debug('', $this->route);
+		controllers_helpers_actionHelpers::debug('', $_SESSION);
+		controllers_helpers_actionHelpers::debug('', $route);*/
+		die;
 		
 		$this->route=$route;
 		return $this->route;
