@@ -23,6 +23,9 @@ class controllers_usersController extends controllers_abstractController{
 		
 		//$users=$gateway->readUsers();
 		$users=$gateUser->readUsers();
+		$users=$gateUser->readUsersFromWS();
+		
+		
 		$viewVars=array('users'=>$users,
 						'title'=>"usuarios");
 		$render = new controllers_helpers_render();

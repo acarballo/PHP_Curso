@@ -6,7 +6,31 @@ class controllers_frontController{
 	
 	public function __construct($router){
 
+		/*
+		echo('<pre>');
+		echo(print_r($router));
+		echo('<br/>');
+		echo('</pre>');
+		*/
+
+		
 		$route = $router->getRoute();
+
+		//FIXME ÑAPA 
+		if(!isset($route['controller'])||$route['controller']==''){
+			$route['controller']='index';
+		}
+		if(!isset($route['action'])||$route['action']==''){
+			$route['action']='index';
+		}
+		
+		/*
+		echo('<pre>');
+		echo(print_r($route));
+		echo('<br/>');
+		echo('</pre>');
+		die;*/
+		
 		$this->config = $_SESSION['register']['config'];
 		
 		$controller = "controllers_".$route['controller']."controller";
@@ -14,9 +38,10 @@ class controllers_frontController{
 		
 		/*echo('<pre>');
 		echo($controller);
+		echo('<br/>');
 		echo($action);
-		echo('</pre>');
-		die;*/
+		echo('</pre>');*/
+		//die;
 		
 		$controller = new $controller;
 		$controller->$action();		

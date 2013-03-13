@@ -55,6 +55,9 @@ class Bootstrap{
 		);
 		$parse=explode('/',$_SERVER['REQUEST_URI']);
 		
+		$route['controller']='index';
+		$route['action']='index';
+		
 		$route['controller']=$parse[1];
 		@$route['action']=$parse[2];
 		
@@ -109,13 +112,17 @@ class Bootstrap{
 						'users'.'.'.'select',
 						'users'.'.'.'insert',
 						'users'.'.'.'update',
+						'ws'.'.'.'index',
 						'users'.'.'.'delete'),
 				'3'=>array('index'.'.'.'index',
 						'author'.'.'.'login',
+						'ws'.'.'.'index',
 						'author'.'.'.'logout'),
 				'4'=>array('index'.'.'.'index',
 						'author'.'.'.'login',
-						'author'.'.'.'logout')
+						'author'.'.'.'logout',
+						'ws'.'.'.'index'
+				)
 		);
 		
 		
@@ -140,10 +147,10 @@ class Bootstrap{
 		//$route['action']='select';
 		//$route['controller']='index';
 		//$route['action']='index';
-	/*	controllers_helpers_actionHelpers::debug('', $this->route);
+		/*controllers_helpers_actionHelpers::debug('', $this->route);
 		controllers_helpers_actionHelpers::debug('', $_SESSION);
-		controllers_helpers_actionHelpers::debug('', $route);*/
-		die;
+		controllers_helpers_actionHelpers::debug('', $route);
+		die;*/
 		
 		$this->route=$route;
 		return $this->route;

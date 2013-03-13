@@ -6,7 +6,7 @@
  * @throws Exception
  */
 function __autoload($className) {
-		
+		//FIXME_hacer autoload mixto para pillar las librerias ???
 	try{
 		$classPath = '../application/'.str_replace('_', '/', $className).'.php';
 		if(file_exists($classPath))

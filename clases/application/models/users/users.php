@@ -8,12 +8,52 @@ class models_users_users
 		$this->link = models_dataGatewayMysql::getInstance()->link;
 	}
 
+	function readUsersFromWS(){
+		echo('aquiiiii ');
+		include ('../library/Zend/Rest/Client.php');
+		$server='http://10.0.3.121:8080/ws/index';
+		$server='http://10.0.3.122:8081/ws2/index';
+
+		$client = new Zend_Rest_Client($server);
+		$users = array();
+		try{
+			//$users = $client->readUsers()->get();
+			//$args = 
+			$users = $client->__call(readUsers);
+		}
+		catch(Exception $e){
+			echo($e);
+		}
+		
+		echo('<br/>');
+		echo('------');
+		echo('<pre>');
+		print_r($client);
+		echo('<br/>');
+		print_r($users);
+		echo('</pre>');
+		echo('------');
+		echo('<br/>');
+		
+		foreach ($users as $key=>$value){
+			$html='';	
+		}
+		
+		//echo $html;
+		$myUser = $users; //lo que viene esta protegido
+		return $myUser;
+	}
+	
 	/**
 	 * Read data from file
 	 * @return array|boolean
 	 */
 	function readUsers(){
 	
+	
+	//	$this->readUsersFromWS();
+	//	die;
+		
 		try{
 			$cnx = $this->link;
 	
